@@ -1,0 +1,60 @@
+{
+  "general":{
+    "nome_sito": "",
+    "img_profilo": "",
+    "contact_mail": "",
+    "nome": "",
+    "skills":[
+      ],
+    "skill_principale":"",
+    "smart_links":[
+      {
+        "url": "",
+        "title": "",
+        "icon": "",
+        "target": ""
+      }
+    ]
+  },
+  "menu":[
+    {
+      "url": "",
+      "title": "",
+      "icon": "",
+      "target": ""
+    }
+  ],
+  "cv":[
+    {
+      "inizio": "",
+      "fine": "",
+      "ruolo": "",
+      "azienda": "",
+      "descrizione": ",
+      "compiti_principali":[
+        {
+          "nome": "",
+          "descrizione": "",
+          "sito": ""
+        }
+      ],
+      "compiti_secondari":[
+        {
+          "nome": "",
+          "descrizione": ""
+        }
+      ]
+    }
+  ],
+  "portfolio":[
+    {
+      "id":"",
+      "titolo": "",
+      "img": "",
+      "descrizione": "",
+      "sito": "",
+      "data": "",
+      "tags":""
+    }
+  ]
+}

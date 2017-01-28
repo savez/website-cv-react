@@ -1,0 +1,496 @@
+<!doctype html>
+<html className="no-js" lang="IT">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/components-font-awesome/css/font-awesome.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+  </head>
+  <body  className="index">
+    <div id="root_container">
+    <!-- build:js scripts/vendor/react.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/scrollreveal/dist/scrollreveal.js"></script>
+    <script src="/bower_components/babel/browser.min.js"></script>
+    <script src="/bower_components/react/react.min.js"></script>
+    <script src="/bower_components/react/react-dom.min.js"></script>
+    <script src="/bower_components/react-bootstrap/react-bootstrap.min.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+      <script>
+      var Modal = ReactBootstrap.Modal;
+      var Button = ReactBootstrap.Button;
+      </script>
+
+      <script type="text/babel">
+        class Site extends React.Component {
+          render() {
+            return (
+              <div>
+                <Menu source={this.props.source} />
+                <Header source={this.props.source} />
+                <Cv source={this.props.source} />
+                <Portfolio source={this.props.source} />
+                <Contact source={this.props.source} />
+                <Footer source={this.props.source} />
+              </div>
+            );
+          }
+        }
+
+        class Menu extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {
+              nome_sito: null,
+              menu: []
+            };
+          }
+
+          componentDidMount() {
+            var _this = this;
+            $.getJSON(this.props.source, function( data ) {
+              _this.setState({
+                nome_sito: data.general.nome_sito,
+                menu: data.menu,
+              });
+            });
+          }
+
+          componentWillUnmount() {
+            this.serverRequest.abort();
+          }
+
+          render() {
+            const items = this.state.menu.map((item, i) => (
+              <MenuItem id={item.title} title={item.title} url={item.url} target={item.target} icon={item.icon} />
+            ));
+            return (
+              <nav className="navbar navbar-default navbar-fixed-top">
+                  <div className="container">
+                      <div className="navbar-header page-scroll">
+                          <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                              <span className="sr-only">Toggle navigation</span>
+                              <span className="icon-bar"></span>
+                              <span className="icon-bar"></span>
+                              <span className="icon-bar"></span>
+                          </button>
+                          <a className="navbar-brand" href="#root_container">{this.state.nome_sito}</a>
+                      </div>
+                      <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style={{height: 1+'px'}}>
+                      <ul className="nav navbar-nav navbar-right">
+                      <li key="principal_element" className="hidden">
+                          <a href="#root_container"></a>
+                      </li>
+                      {items}
+                      </ul>
+                      </div>
+                  </div>
+              </nav>
+            );
+          }
+        }
+
+        class MenuItem extends React.Component {
+          render() {
+              if(this.props.icon != ''){
+                return(
+                  <li key={this.props.id} className="hidden-xs">
+                    <a href={this.props.url} target={this.props.target}><i className={'fa fa-lg '+this.props.icon}></i></a>
+                  </li>
+                );
+              }else{
+                return(
+                  <li key={this.props.id} className="page-scroll">
+                    <a href={this.props.url}>{this.props.title}</a>
+                  </li>
+                );
+              }
+          }
+        }
+
+        class Header extends React.Component{
+          constructor(props) {
+            super(props);
+            this.state = {
+              img_profilo: null,
+              nome: null,
+              skills: [],
+              titolo: null,
+              smart_links: [],
+            };
+          }
+
+          componentDidMount() {
+            var _this = this;
+            $.getJSON(this.props.source, function( data ) {
+              _this.setState({
+                img_profilo: data.general.img_profilo,
+                nome: data.general.nome,
+                skills: data.general.skills,
+                titolo: data.general.skill_principale,
+                smart_links: data.general.smart_links,
+              });
+            });
+          }
+
+          componentWillUnmount() {
+            this.serverRequest.abort();
+          }
+
+          render() {
+            const skills = this.state.skills.map((item, i) => (
+              <p key={'skills'+i}>{item}</p>
+            ));
+            const smart_links =  this.state.smart_links.map((item, i) => (
+              <a key={item.title} alt={item.title} style={{color: '#FFF', marginLeft: 15+'px'}} href={item.url} target="_blank"><i className={item.icon+' fa-2x fa'}></i></a>
+            ));
+            return (
+              <header>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <img className="img-responsive" src={this.state.img_profilo} alt="foto profilo" />
+                            <div className="intro-text">
+                                <span className="name">{this.state.nome}</span>
+                                <hr className="star-light" />
+                                <span className="skills">{this.state.titolo}</span>
+                                <div className="skills2">
+                                  {skills}
+                                </div>
+                                <div style={{marginTop:40+'px'}}>
+                                  {smart_links}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </header>
+            );
+          }
+        }
+
+        class Cv extends React.Component{
+          constructor(props) {
+            super(props);
+            this.state = {
+              cv: []
+            };
+          }
+
+          componentDidMount() {
+            var _this = this;
+            $.getJSON(this.props.source, function( data ) {
+              _this.setState({
+                cv: data.cv
+              });
+            });
+          }
+
+          componentWillUnmount() {
+            this.serverRequest.abort();
+          }
+
+          render() {
+            const cvs = this.state.cv.map((item, i) => (
+              <CvItem item={item} />
+            ));
+            return (
+              <section  id="about">
+                  <div className="container">
+                      <div className="row">
+                          <div className="col-lg-12 text-center">
+                              <h2>About</h2>
+                              <hr className="star-primary" />
+                          </div>
+                      </div>
+                      {cvs}
+                  </div>
+              </section>
+            );
+          }
+        }
+
+        class CvItem extends React.Component {
+          render() {
+            var cvitem = this.props.item;
+
+            const principalItems = cvitem.compiti_principali.map((item, i) => (
+              <li key={'cvitem_'+i}>
+                {function(){
+                  if(item.nome != ''){
+                    return <strong>{item.nome}:</strong>
+                  }
+                }.call(this)}
+                <span>{item.descrizione}</span>
+                {function(){
+                  if(item.sito != ''){
+                    return <small><em> (<a href={item.sito} target="_blank">{item.sito}</a>)</em></small>
+                  }
+                }.call(this)}
+              </li>
+            ));
+
+            const secondaryItems = cvitem.compiti_secondari.map((item, i) => (
+              <li key={'cvitem_2_'+i}>
+                {function(){
+                  if(item.nome !== ''){
+                    return <strong>{item.nome}:</strong>
+                  }
+                }.call(this)}
+                <span>{item.descrizione}</span>
+              </li>
+            ));
+
+            return (
+              <div className="row">
+                <div className="col-lg-3 col-lg-offset-1">
+                  <p>
+                    {cvitem.inizio} - {cvitem.fine}
+                  </p>
+                </div>
+                <div className="col-lg-8">
+                  <p>
+                    <strong>{cvitem.ruolo}</strong><br/>
+                  </p>
+                  <p><em>{cvitem.descrizione}</em></p>
+                  {function(){
+                    if(cvitem.compiti_principali.length > 0){
+                      return <ul>{principalItems}</ul>
+                    }
+                  }.call(this)}
+                  {function(){
+                    if(cvitem.compiti_secondari.length > 0){
+                      return <div><p><em>Altre mansioni</em></p><ul>{secondaryItems}</ul></div>
+                    }
+                  }.call(this)}
+                </div>
+              </div>
+            );
+          }
+        }
+
+        class Portfolio extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {
+              portfolio: []
+            };
+          }
+
+          componentDidMount() {
+            var _this = this;
+            $.getJSON(this.props.source, function( data ) {
+              _this.setState({
+                portfolio: data.portfolio
+              });
+            });
+          }
+
+          componentWillUnmount() {
+            this.serverRequest.abort();
+          }
+
+          render() {
+            const itemsPortfolio = this.state.portfolio.map((item, i) => (
+              <PortfolioItem item={item} />
+            ));
+            return (
+              <section className="success" id="portfolio">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <h2>Portfolio</h2>
+                            <hr className="star-light" />
+                        </div>
+                    </div>
+                    <div className="row">
+                    {itemsPortfolio}
+                    </div>
+                </div>
+              </section>
+            );
+          }
+        }
+
+        class PortfolioItem extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {
+              showModal: false
+            };
+          }
+          closeModal() {
+            this.setState({showModal: false });
+          }
+
+          openModal() {
+            this.setState({showModal: true });
+          }
+          render() {
+            var item = this.props.item;
+            return (
+              <div>
+                <div className="col-sm-4 portfolio-item">
+                    <a href="#" onClick={this.openModal.bind(this)} className="portfolio-link" data-toggle="modal">
+                        <div className="caption">
+                            <div className="caption-content">
+                                <i className="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src={'img/portfolio/'+item.img} className="img-responsive" alt="" />
+                    </a>
+                    <h4 className="text-center no-link">{item.titolo}</h4>
+                </div>
+                <div>
+                <Modal show={this.state.showModal} onHide={this.closeModal.bind(this)} dialogClassName="portfolio-modal">
+                  <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-sm">{item.titolo}</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    {item.descrizione}
+                    <div>
+                    <ul className="list-inline item-details">
+                        <li>Cliente:
+                            <strong>
+                              {item.sito}
+                            </strong>
+                        </li>
+                        <li>Data:
+                            <strong>
+                              {item.data}
+                            </strong>
+                        </li>
+                        <li>Tags:
+                            <strong>
+                              {item.tags}
+                            </strong>
+                        </li>
+                    </ul>
+                    </div>
+                  </Modal.Body>
+                </Modal>
+                </div>
+              </div>
+            );
+          }
+        }
+
+        class Footer extends React.Component{
+          constructor(props) {
+            super(props);
+            this.state = {
+              nome_sito: null,
+              skill_principale: null
+            };
+          }
+
+          componentDidMount() {
+            var _this = this;
+            $.getJSON(this.props.source, function( data ) {
+              _this.setState({
+                nome_sito: data.general.nome_sito,
+                skill_principale : data.general.skill_principale,
+              });
+            });
+          }
+
+          componentWillUnmount() {
+            this.serverRequest.abort();
+          }
+          render(){
+            return(
+              <footer className="text-center">
+                  <div className="footer-below">
+                      <div className="container">
+                          <div className="row">
+                              <div className="col-lg-12">
+                                  {this.state.nome_sito} - <em>{this.state.skill_principale}</em>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </footer>
+            );
+          }
+        }
+
+        class Contact extends React.Component{
+          constructor(props) {
+            super(props);
+            this.state = {
+              contact_mail: ''
+            };
+          }
+
+          componentDidMount() {
+            var _this = this;
+            $.getJSON(this.props.source, function( data ) {
+              _this.setState({
+                contact_mail: data.general.contact_mail
+              });
+            });
+          }
+
+          componentWillUnmount() {
+            this.serverRequest.abort();
+          }
+          render(){
+            var contact_mail = this.state.contact_mail;
+            var mail = contact_mail.split('@');
+            return(
+              <section id="contact">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <h2>Contact Me</h2>
+                            <hr className="star-primary" />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-8 col-lg-offset-2">
+                            <div className="lead text-center"><a href={'mailto:'+contact_mail}>{mail[0]}<span className="dominio"></span>{mail[1]}</a></div>
+                        </div>
+                    </div>
+                </div>
+              </section>
+            );
+          }
+        }
+        ReactDOM.render(<Site source="json/content.json"/>, document.getElementById("root_container"));
+    </script>
+      <!-- endbuild -->
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-3092251-9', 'auto');
+        ga('send', 'pageview');
+      </script>
+      </div>
+  </body>
+</html>
