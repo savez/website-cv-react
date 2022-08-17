@@ -5,9 +5,8 @@ services:
       context: .
     volumes:
       - .:/usr/src/app
-    extra_hosts:
-      - 'website-cv-react.loc:0.0.0.0'
     ports:
-      - 3000:3000
+      - 9000:9000
+      - 3001:3001
     labels:
       com.dnsdock.alias: website-cv-react.loc

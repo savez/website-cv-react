@@ -157,7 +157,7 @@ gulp.task('wiredep', function () {
 });
 
 
-gulp.task('build', gulp.series(['lint', 'html', 'images', 'img', 'fonts', 'extras', 'jsondata']), function () {
+gulp.task('build', gulp.series('lint', 'html', 'images', 'img', 'fonts', 'extras', 'jsondata'), function () {
   return gulp.src('dist/**/*').pipe($.size({ title: 'build', gzip: true }));
 });
 

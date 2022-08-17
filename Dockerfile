@@ -13,7 +13,8 @@ RUN npm install --global gulp-cli
 RUN yarn config set registry ${NPM_REGISTRY} \
     && yarn config set strict-ssl false
 
-COPY package.json /usr/src/app/
+COPY package.json  /usr/src/app/
+COPY yarn.lock  /usr/src/app/
 
 RUN cd /usr/src/app && yarn install --frozen-lockfile
 
@@ -25,4 +26,8 @@ RUN chmod +x /entrypoint.sh
 # Copy the app.
 COPY . /usr/src/app
 
+EXPOSE 3001
+EXPOSE 9000
+
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gulp", "serve:dist"]
