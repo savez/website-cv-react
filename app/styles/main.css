@@ -469,17 +469,16 @@ footer .footer-below {
 }
 
 .dominio::before {
-  content: "\0040";
+    content: "\0040";
 }
 .dark{
-  background-color: #233140;
-  color: #FFF;
+    background-color: #233140;
+    color: #FFF;
 }
 nav.navbar{
-   // Animation
-   -webkit-transition: all 0.4s ease;
-   transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
 }
 nav.navbar.shrink {
-  min-height: 35px;
+    min-height: 35px;
 }
